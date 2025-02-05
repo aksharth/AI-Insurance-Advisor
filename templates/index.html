@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insurance Comparison</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --card-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --text-color: #333333;
+            --card-background: #ffffff;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: #f8fafc;
+        }
+
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .search-section {
+            margin: 2rem auto;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .insurance-inputs {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 95%;
+            padding: 1.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            color: #666;
+            background: #f8fafc;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        .vs-symbol {
+            color: #8b5cf6;
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .search-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 1.25rem 2.5rem;
+            border-radius: 16px;
+            font-size: 1.125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            background: #7c3aed;
+        }
+
+        .add-insurance {
+            padding: 1.25rem 2.5rem;
+            background: transparent;
+            color: #8b5cf6;
+            border: 2px solid #8b5cf6;
+            border-radius: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .insurance-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .insurance-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: var(--card-gradient);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .csr-stats {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .pros-cons {
+            margin-top: 1.5rem;
+        }
+
+        .pros-cons h3 {
+            color: #8b5cf6;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros-cons ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pros-cons li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros li:before {
+            content: "✓";
+            color: var(--success-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .cons li:before {
+            content: "×";
+            color: var(--error-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .reddit-reviews {
+            margin-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+
+        .reddit-review {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #8b5cf6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            background: var(--primary-gradient);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .insurance-inputs {
+                gap: 0.75rem;
+            }
+            
+            .input-group {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                padding: 1rem;
+            }
+            
+            .search-box {
+                padding: 1rem;
+            }
+
+            .insurance-inputs {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .input-group {
+                width: 100%;
+            }
+
+            .vs-symbol {
+                padding: 0.5rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-btn, 
+            .add-insurance {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <h1>AI-Powered Insurance Comparison</h1>
+        <p>Compare insurance plans and coverage with real customer reviews for you.</p>
+    </div>
+
+    <div class="container">
+        <div class="search-section">
+            <div class="search-box">
+                <div class="insurance-inputs" id="insuranceInputs">
+                    <div class="input-group">
+                        <input type="text" placeholder="Enter first insurance name" required>
+                    </div>
+                    <div class="vs-symbol">VS</div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Enter second insurance name" required>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="add-insurance" id="addInsurance">+ Add Another Insurance</button>
+                    <button class="search-btn" id="compareBtn">Compare Insurance</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing insurance plans...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="results-grid" id="comparisonGrid">
+            <!-- Results will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <footer>
+        © 2025 AI Insurance Comparison. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const insuranceInputs = document.getElementById('insuranceInputs');
+            const addInsuranceBtn = document.getElementById('addInsurance');
+            const compareBtn = document.getElementById('compareBtn');
+            const loadingDiv = document.getElementById('loading');
+            const comparisonGrid = document.getElementById('comparisonGrid');
+            const errorMessage = document.getElementById('errorMessage');
+            let insuranceCount = 2;
+
+            addInsuranceBtn.addEventListener('click', function() {
+                if (insuranceCount < 4) {
+                    // Add VS symbol
+                    const vsSymbol = document.createElement('div');
+                    vsSymbol.className = 'vs-symbol';
+                    vsSymbol.textContent = 'VS';
+                    insuranceInputs.appendChild(vsSymbol);
+
+                    // Add new input
+                    const newInput = document.createElement('div');
+                    newInput.className = 'input-group';
+                    newInput.innerHTML = `
+                        <input type="text" 
+                               placeholder="Enter insurance name" 
+                               required>
+                    `;
+                    insuranceInputs.appendChild(newInput);
+                    insuranceCount++;
+
+                    if (insuranceCount >= 4) {
+                        addInsuranceBtn.style.display = 'none';
+                    }
+                }
+            });
+
+            compareBtn.addEventListener('click', async function() {
+                const inputs = insuranceInputs.getElementsByTagName('input');
+                const insuranceNames = Array.from(inputs)
+                    .map(input => input.value.trim())
+                    .filter(value => value !== '');
+
+                if (insuranceNames.length < 2) {
+                    showError('Please enter at least two insurance names');
+                    return;
+                }
+
+                showLoading();
+                try {
+                    const response = await fetch('/compare', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ insurance_names: insuranceNames })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayResults(data);
+                } catch (error) {
+                    showError(error.message);
+                } finally {
+                    hideLoading();
+                }
+            });
+
+            function showLoading() {
+                loadingDiv.style.display = 'block';
+                comparisonGrid.innerHTML = ''; // Clear previous results
+                errorMessage.style.display = 'none';
+            }
+
+            function hideLoading() {
+                loadingDiv.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                comparisonGrid.innerHTML = ''; // Clear previous results
+            }
+
+            function displayResults(data) {
+                comparisonGrid.innerHTML = '';
+                
+                for (const [planName, planDetails] of Object.entries(data.insurance_plans)) {
+                    // Format the insurance name for Reddit search (replace spaces with underscores and remove special characters)
+                    const redditSearchTerm = planName.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                    
+                    const card = document.createElement('div');
+                    card.className = 'insurance-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h2>${planName}</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="csr-stats">
+                                CSR: ${planDetails.csr_rate}% | Hospital Cover: ${planDetails.total_hospital_cover}
+                            </div>
+                            <div>Network Hospitals: ${planDetails.network_hospitals}</div>
+                            <div>Claim Processing Time: ${planDetails.claim_processing_time}</div>
+                            
+                            <div class="pros-cons">
+                                <div class="pros">
+                                    <h3>Pros</h3>
+                                    <ul>
+                                        ${planDetails.pros.map(pro => `<li>${pro}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="cons">
+                                    <h3>Cons</h3>
+                                    <ul>
+                                        ${planDetails.cons.map(con => `<li>${con}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="reddit-reviews">
+                                <h3>Reddit Reviews</h3>
+                                ${planDetails.reddit_reviews.map(review => `
+                                    <div class="reddit-review ${review.sentiment}">
+                                        <h4>
+                                            <a href="https://www.reddit.com/search/?q=${redditSearchTerm}_insurance_experience" 
+                                               target="_blank" 
+                                               rel="noopener noreferrer">
+                                                ${review.title}
+                                            </a>
+                                        </h4>
+                                        <p>${review.summary}</p>
+                                        <div class="key-points">
+                                            <ul>
+                                                ${review.key_points.map(point => `<li>${point}</li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    comparisonGrid.appendChild(card);
+                }
+
+                // Add recommendation card if recommendation exists
+                if (data.recommendation) {
+                    const recommendationCard = document.createElement('div');
+                    recommendationCard.className = 'insurance-card recommendation';
+                    recommendationCard.innerHTML = `
+                        <div class="card-header">
+                            <h2>Ai Recommendation</h2>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Recommended Plan:</strong> ${data.recommendation.recommended_plan}</p>
+                            <p><strong>Reason:</strong> ${data.recommendation.reason}</p>
+                            <h3>Best Suited For:</h3>
+                            <ul>
+                                ${data.recommendation.best_suited_for.map(suit => `<li>${suit}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    comparisonGrid.appendChild(recommendationCard);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
